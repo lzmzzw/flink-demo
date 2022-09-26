@@ -13,7 +13,7 @@ public class KeyedStreamTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Tom", "/prod?id=1", 3000L),
@@ -25,10 +25,10 @@ public class KeyedStreamTest {
 
         // 转换计算
         // 1.使用自定义类，实现KeySelector接口
-        SingleOutputStreamOperator<Event> result1 = steam.keyBy(new MyMapper()).max("timestamp");
+        SingleOutputStreamOperator<Event> result1 = stream.keyBy(new MyMapper()).max("timestamp");
 
         // 2.使用lambda表达式
-        SingleOutputStreamOperator<Event> result2 = steam.keyBy(v -> v.user).maxBy("timestamp");
+        SingleOutputStreamOperator<Event> result2 = stream.keyBy(v -> v.user).maxBy("timestamp");
 
         result1.print("max");
         result2.print("maxBy");

@@ -13,17 +13,17 @@ public class FilterTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L)
         );
 
         // 转换计算
         // 1.使用自定义类，实现FilterFunction接口
-        SingleOutputStreamOperator<Event> result1 = steam.filter(new MyMapper());
+        SingleOutputStreamOperator<Event> result1 = stream.filter(new MyMapper());
 
         // 2.使用lambda表达式
-        SingleOutputStreamOperator<Event> result2 = steam.filter(v -> v.user.equals("Tom"));
+        SingleOutputStreamOperator<Event> result2 = stream.filter(v -> v.user.equals("Tom"));
 
         result1.print("1");
         result2.print("2");

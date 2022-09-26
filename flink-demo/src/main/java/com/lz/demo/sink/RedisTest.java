@@ -16,7 +16,7 @@ public class RedisTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataStreamSource<Event> steam = env.addSource(new ClickSource());
+        DataStreamSource<Event> stream = env.addSource(new ClickSource());
 
         // 创建jedis连接
         FlinkJedisPoolConfig config = new FlinkJedisPoolConfig.Builder()
@@ -25,7 +25,7 @@ public class RedisTest {
                 .setPassword("123456")
                 .build();
 
-        steam.addSink(new RedisSink<>(config, new MyRedisMapper()));
+        stream.addSink(new RedisSink<>(config, new MyRedisMapper()));
 
         env.execute();
     }

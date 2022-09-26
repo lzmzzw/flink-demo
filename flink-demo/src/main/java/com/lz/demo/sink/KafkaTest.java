@@ -33,10 +33,10 @@ public class KafkaTest {
         properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.setProperty("auto.offset.reset", "latest");
 
-        DataStreamSource<String> steam = env.addSource(new FlinkKafkaConsumer<>("clicks", new SimpleStringSchema(), properties));
+        DataStreamSource<String> stream = env.addSource(new FlinkKafkaConsumer<>("clicks", new SimpleStringSchema(), properties));
 
         // 2.用flink转换处理
-        SingleOutputStreamOperator<String> result = steam.map(v -> {
+        SingleOutputStreamOperator<String> result = stream.map(v -> {
             String[] fields = v.split(",");
             return new Event(fields[0].trim(), fields[1].trim(), Long.valueOf(fields[2].trim())).toString();
         });

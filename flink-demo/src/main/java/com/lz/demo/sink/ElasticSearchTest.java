@@ -21,7 +21,7 @@ public class ElasticSearchTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Jerry", "/prod?id=1", 3000L),
@@ -48,7 +48,7 @@ public class ElasticSearchTest {
             requestIndexer.add(request);
         };
 
-        steam.addSink(new ElasticsearchSink.Builder<>(httpHostList, eventElasticsearchSinkFunction).build());
+        stream.addSink(new ElasticsearchSink.Builder<>(httpHostList, eventElasticsearchSinkFunction).build());
 
         env.execute();
     }

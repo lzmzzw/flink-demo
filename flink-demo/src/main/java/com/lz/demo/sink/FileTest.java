@@ -17,7 +17,7 @@ public class FileTest {
         env.setParallelism(4);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Jerry", "/prod?id=1", 3000L),
@@ -37,7 +37,7 @@ public class FileTest {
                                 .build())
                 .build();
 
-        steam.map(Event::toString).addSink(stringStreamingFileSink);
+        stream.map(Event::toString).addSink(stringStreamingFileSink);
 
         env.execute();
     }

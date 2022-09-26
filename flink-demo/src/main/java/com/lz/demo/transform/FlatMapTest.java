@@ -15,17 +15,17 @@ public class FlatMapTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L)
         );
 
         // 转换计算
         // 1.使用自定义类，实现FlatMapFunction接口
-        SingleOutputStreamOperator<String> result1 = steam.flatMap(new MyMapper());
+        SingleOutputStreamOperator<String> result1 = stream.flatMap(new MyMapper());
 
         // 2.使用lambda表达式
-        SingleOutputStreamOperator<String> result2 = steam.flatMap((Event event, Collector<String> collector) -> {
+        SingleOutputStreamOperator<String> result2 = stream.flatMap((Event event, Collector<String> collector) -> {
             collector.collect(event.user);
             collector.collect(event.url);
             collector.collect(event.timestamp.toString());

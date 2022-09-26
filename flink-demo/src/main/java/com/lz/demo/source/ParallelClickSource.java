@@ -5,6 +5,7 @@ import org.apache.flink.streaming.api.functions.source.ParallelSourceFunction;
 
 import java.util.Calendar;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class ParallelClickSource implements ParallelSourceFunction<Event> {
     private boolean running = true;
@@ -20,7 +21,7 @@ public class ParallelClickSource implements ParallelSourceFunction<Event> {
             String url = urls[random.nextInt(urls.length)];
             Long timestamp = Calendar.getInstance().getTimeInMillis();
             sourceContext.collect(new Event(user, url, timestamp));
-            Thread.sleep(3000L);
+            TimeUnit.SECONDS.sleep(1);
         }
     }
 

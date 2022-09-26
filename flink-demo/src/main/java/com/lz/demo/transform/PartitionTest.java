@@ -13,7 +13,7 @@ public class PartitionTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Jerry", "/prod?id=1", 3000L),
@@ -25,10 +25,10 @@ public class PartitionTest {
         );
 
         // 1.随机分区
-        // steam.shuffle().print().setParallelism(4);
+        // stream.shuffle().print().setParallelism(4);
 
         // 2.轮询分区
-        // steam.rebalance().print().setParallelism(4);
+        // stream.rebalance().print().setParallelism(4);
 
         // 3.重缩放分区
 //        env.addSource(new RichParallelSourceFunction<Integer>() {
@@ -52,10 +52,10 @@ public class PartitionTest {
 //                .setParallelism(4);
 
         // 4.广播
-        // steam.broadcast().print().setParallelism(4);
+        // stream.broadcast().print().setParallelism(4);
 
         // 5.全局分区
-        // steam.global().print().setParallelism(4);
+        // stream.global().print().setParallelism(4);
 
         // 6.自定义分区
         env.fromElements(1, 2, 3, 4, 5, 6, 7, 8)

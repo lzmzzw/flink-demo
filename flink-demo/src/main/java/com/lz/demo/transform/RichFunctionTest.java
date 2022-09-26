@@ -14,7 +14,7 @@ public class RichFunctionTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Jerry", "/prod?id=1", 3000L),
@@ -25,7 +25,7 @@ public class RichFunctionTest {
         );
 
         // 转换计算
-        SingleOutputStreamOperator<Integer> result = steam.map(new MyRichMapper()).setParallelism(2);
+        SingleOutputStreamOperator<Integer> result = stream.map(new MyRichMapper()).setParallelism(2);
 
         result.print();
 

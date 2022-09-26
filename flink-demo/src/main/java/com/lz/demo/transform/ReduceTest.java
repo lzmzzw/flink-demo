@@ -14,7 +14,7 @@ public class ReduceTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Jerry", "/prod?id=1", 3000L),
@@ -26,7 +26,7 @@ public class ReduceTest {
 
         // 转换计算
         // 1.统计每个用户的访问频次
-        SingleOutputStreamOperator<Tuple2<String, Long>> clicksByUser = steam
+        SingleOutputStreamOperator<Tuple2<String, Long>> clicksByUser = stream
                 .map(v -> Tuple2.of(v.user, 1L))
                 .returns(Types.TUPLE(Types.STRING, Types.LONG))
                 .keyBy(v -> v.f0)

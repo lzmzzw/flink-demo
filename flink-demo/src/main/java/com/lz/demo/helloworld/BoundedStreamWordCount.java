@@ -1,4 +1,4 @@
-package com.lz.demo.simple;
+package com.lz.demo.helloworld;
 
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;

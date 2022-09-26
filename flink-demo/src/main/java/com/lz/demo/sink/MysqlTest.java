@@ -13,7 +13,7 @@ public class MysqlTest {
         env.setParallelism(1);
 
         // 从元素读取
-        DataStreamSource<Event> steam = env.fromElements(
+        DataStreamSource<Event> stream = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L),
                 new Event("Jerry", "/prod?id=1", 3000L),
@@ -24,7 +24,7 @@ public class MysqlTest {
                 new Event("Jerry", "/home", 8000L)
         );
 
-        steam.addSink(JdbcSink.sink(
+        stream.addSink(JdbcSink.sink(
                 "insert into clicks (user, url) values (?, ?)",
                 ((statement, event) -> {
                     statement.setString(1, event.user);
