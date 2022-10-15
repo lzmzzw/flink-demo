@@ -54,14 +54,14 @@ public class LoginFailDetectProcess {
 
         // 3 将匹配到的复杂事件选择出来，然后包装成字符串报警信息输出
         patternStream.process(new PatternProcessFunction<LoginEvent, String>() {
-                    @Override
-                    public void processMatch(Map<String, List<LoginEvent>> map, Context context, Collector<String> collector) throws Exception {
-                        LoginEvent first = map.get("fail").get(0);
-                        LoginEvent second = map.get("fail").get(1);
-                        LoginEvent third = map.get("fail").get(2);
-                        collector.collect(first.userId + " 连续三次登录失败！登录时间：" + first.timestamp + ", " + second.timestamp + ", " + third.timestamp);
-                    }
-                })
+            @Override
+            public void processMatch(Map<String, List<LoginEvent>> map, Context context, Collector<String> collector) throws Exception {
+                LoginEvent first = map.get("fail").get(0);
+                LoginEvent second = map.get("fail").get(1);
+                LoginEvent third = map.get("fail").get(2);
+                collector.collect(first.userId + " 连续三次登录失败！登录时间：" + first.timestamp + ", " + second.timestamp + ", " + third.timestamp);
+            }
+        })
                 .print("warning");
         env.execute();
     }

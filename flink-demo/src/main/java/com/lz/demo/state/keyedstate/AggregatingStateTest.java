@@ -101,5 +101,4 @@ public class AggregatingStateTest {
             return null;
         }
     }
-
 }

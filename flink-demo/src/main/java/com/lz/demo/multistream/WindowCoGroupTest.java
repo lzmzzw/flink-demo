@@ -21,17 +21,17 @@ public class WindowCoGroupTest {
         env.getConfig().setAutoWatermarkInterval(100);
 
         SingleOutputStreamOperator<Tuple2<String, Long>> stream1 = env.fromElements(
-                        Tuple2.of("a", 1000L),
-                        Tuple2.of("a", 2000L),
-                        Tuple2.of("b", 4500L))
+                Tuple2.of("a", 1000L),
+                Tuple2.of("a", 2000L),
+                Tuple2.of("b", 4500L))
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Tuple2<String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                         .withTimestampAssigner((element, recordTimestamp) -> element.f1)
                 );
 
         SingleOutputStreamOperator<Tuple3<String, String, Long>> stream2 = env.fromElements(
-                        Tuple3.of("a", "a", 3000L),
-                        Tuple3.of("b", "b", 4000L),
-                        Tuple3.of("c", "c", 4000L))
+                Tuple3.of("a", "a", 3000L),
+                Tuple3.of("b", "b", 4000L),
+                Tuple3.of("c", "c", 4000L))
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Tuple3<String, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                         .withTimestampAssigner((element, recordTimestamp) -> element.f2)
                 );

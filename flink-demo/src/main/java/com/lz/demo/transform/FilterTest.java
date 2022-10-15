@@ -31,7 +31,7 @@ public class FilterTest {
         env.execute();
     }
 
-    // 自定义map function
+    // 自定义filter function
     public static class MyMapper implements FilterFunction<Event> {
         @Override
         public boolean filter(Event event) {

@@ -26,18 +26,18 @@ public class BillCheckExample {
 
         // app支付日志
         SingleOutputStreamOperator<Tuple3<String, String, Long>> appStream = env.fromElements(
-                        Tuple3.of("order1", "app", 1000L),
-                        Tuple3.of("order2", "app", 2000L),
-                        Tuple3.of("order3", "app", 3500L))
+                Tuple3.of("order1", "app", 1000L),
+                Tuple3.of("order2", "app", 2000L),
+                Tuple3.of("order3", "app", 3500L))
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Tuple3<String, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                         .withTimestampAssigner((element, recordTimestamp) -> element.f2)
                 );
 
         // 第三方平台支付日志
         SingleOutputStreamOperator<Tuple4<String, String, String, Long>> thirdPartyStream = env.fromElements(
-                        Tuple4.of("order1", "third-party", "success", 3000L),
-                        Tuple4.of("order2", "third-party", "success", 4000L),
-                        Tuple4.of("order4", "third-party", "success", 4000L))
+                Tuple4.of("order1", "third-party", "success", 3000L),
+                Tuple4.of("order2", "third-party", "success", 4000L),
+                Tuple4.of("order4", "third-party", "success", 4000L))
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Tuple4<String, String, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                         .withTimestampAssigner((element, recordTimestamp) -> element.f3)
                 );

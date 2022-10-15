@@ -83,5 +83,4 @@ public class MapStateTest {
             windowUrlCountMapState.remove(windowStart);
         }
     }
-
 }

@@ -61,7 +61,8 @@ public class OrderTimeoutDetect {
         PatternStream<OrderEvent> patternStream = CEP.pattern(stream.keyBy(order -> order.orderId), pattern);
 
         // 3 定义侧输出流
-        OutputTag<String> timeoutTag = new OutputTag<String>("timeout"){};
+        OutputTag<String> timeoutTag = new OutputTag<String>("timeout") {
+        };
 
         // 4 将匹配到的，和超时部分匹配的复杂事件提取出来，然后包装成提示信息输出
         SingleOutputStreamOperator<String> payedOrderStream = patternStream.process(new OrderPayPatternMatch());
@@ -86,7 +87,8 @@ public class OrderTimeoutDetect {
         @Override
         public void processTimedOutMatch(Map<String, List<OrderEvent>> match, Context ctx) {
             OrderEvent createEvent = match.get("create").get(0);
-            ctx.output(new OutputTag<String>("timeout") {}, "订单 " + createEvent.orderId + " 超时未支付！用户为：" + createEvent.userId);
+            ctx.output(new OutputTag<String>("timeout") {
+            }, "订单 " + createEvent.orderId + " 超时未支付！用户为：" + createEvent.userId);
         }
     }
 }

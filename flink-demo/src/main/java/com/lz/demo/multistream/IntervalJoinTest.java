@@ -21,24 +21,24 @@ public class IntervalJoinTest {
         env.getConfig().setAutoWatermarkInterval(100);
 
         SingleOutputStreamOperator<Tuple2<String, Long>> orderStream = env.fromElements(
-                        Tuple2.of("Tom", 1000L),
-                        Tuple2.of("Jerry", 2000L),
-                        Tuple2.of("Tom", 3000L),
-                        Tuple2.of("Spike", 4500L))
+                Tuple2.of("Tom", 1000L),
+                Tuple2.of("Jerry", 2000L),
+                Tuple2.of("Tom", 3000L),
+                Tuple2.of("Spike", 4500L))
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Tuple2<String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                         .withTimestampAssigner((element, recordTimestamp) -> element.f1)
                 );
 
         SingleOutputStreamOperator<Event> clickStream = env.fromElements(
-                        new Event("Tom", "/home", 1000L),
-                        new Event("Jerry", "/cart", 3000L),
-                        new Event("Jerry", "/prod?id=1", 5000L),
-                        new Event("Spike", "/prod?id=10", 7000L),
-                        new Event("Tom", "/prod?id=10", 15000L),
-                        new Event("Tom", "/cart", 30000L),
-                        new Event("Jerry", "/home", 50000L),
-                        new Event("Jerry", "/home", 80000L)
-                )
+                new Event("Tom", "/home", 1000L),
+                new Event("Jerry", "/cart", 3000L),
+                new Event("Jerry", "/prod?id=1", 5000L),
+                new Event("Spike", "/prod?id=10", 7000L),
+                new Event("Tom", "/prod?id=10", 15000L),
+                new Event("Tom", "/cart", 30000L),
+                new Event("Jerry", "/home", 50000L),
+                new Event("Jerry", "/home", 80000L)
+        )
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Event>forBoundedOutOfOrderness(Duration.ofSeconds(0))
                         .withTimestampAssigner((element, recordTimestamp) -> element.timestamp)
                 );

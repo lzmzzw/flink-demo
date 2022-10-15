@@ -65,12 +65,12 @@ public class LoginFailDetectSelect {
 
         // 3 将匹配到的复杂事件选择出来，然后包装成字符串报警信息输出
         patternStream.select(
-                        (PatternSelectFunction<LoginEvent, String>) map -> {
-                            LoginEvent first = map.get("first").get(0);
-                            LoginEvent second = map.get("second").get(0);
-                            LoginEvent third = map.get("third").get(0);
-                            return first.userId + " 连续三次登录失败！登录时间：" + first.timestamp + ", " + second.timestamp + ", " + third.timestamp;
-                        })
+                (PatternSelectFunction<LoginEvent, String>) map -> {
+                    LoginEvent first = map.get("first").get(0);
+                    LoginEvent second = map.get("second").get(0);
+                    LoginEvent third = map.get("third").get(0);
+                    return first.userId + " 连续三次登录失败！登录时间：" + first.timestamp + ", " + second.timestamp + ", " + third.timestamp;
+                })
                 .print("warning");
         env.execute();
     }

@@ -21,20 +21,53 @@ public class NFAExample {
 
         // 获取登录事件流
         KeyedStream<LoginEvent, String> stream = env.fromElements(
-                        new LoginEvent("user_1", "192.168.0.1", "fail", 2000L),
-                        new LoginEvent("user_1", "192.168.0.2", "fail", 3000L),
-                        new LoginEvent("user_2", "192.168.1.29", "fail", 4000L),
-                        new LoginEvent("user_1", "171.56.23.10", "fail", 5000L),
-                        new LoginEvent("user_2", "192.168.1.29", "success", 6000L),
-                        new LoginEvent("user_2", "192.168.1.29", "fail", 7000L),
-                        new LoginEvent("user_2", "192.168.1.29", "fail", 8000L)
-                )
+                new LoginEvent("user_1", "192.168.0.1", "fail", 2000L),
+                new LoginEvent("user_1", "192.168.0.2", "fail", 3000L),
+                new LoginEvent("user_2", "192.168.1.29", "fail", 4000L),
+                new LoginEvent("user_1", "171.56.23.10", "fail", 5000L),
+                new LoginEvent("user_2", "192.168.1.29", "success", 6000L),
+                new LoginEvent("user_2", "192.168.1.29", "fail", 7000L),
+                new LoginEvent("user_2", "192.168.1.29", "fail", 8000L)
+        )
                 .keyBy(r -> r.userId);
 
         // 将数据依次输入状态机进行处理
         DataStream<String> alertStream = stream.flatMap(new StateMachineMapper());
         alertStream.print("warning");
         env.execute();
+    }
+
+    // 状态机实现
+    public enum State {
+        // 匹配失败，当前匹配终止
+        Terminal,
+        // 匹配成功
+        Matched,
+        // S2 状态
+        S2(new Transition("fail", Matched), new Transition("success", Terminal)),
+        // S1 状态
+        S1(new Transition("fail", S2), new Transition("success", Terminal)),
+        // 初始状态
+        Initial(new Transition("fail", S1), new Transition("success", Terminal));
+
+        // 状态转移规则
+        private final Transition[] transitions;
+
+        // 状态的构造方法，可以传入一组状态转移规则来定义状态
+        State(Transition... transitions) {
+            this.transitions = transitions;
+        }
+
+        // 状态的转移方法，根据当前输入事件类型，从定义好的转移规则中找到下一个状态
+        public State transition(String eventType) {
+            for (Transition t : transitions) {
+                if (t.getEventType().equals(eventType)) {
+                    return t.getTargetState();
+                }
+            }
+            // 如果没有找到转移规则，说明已经结束，回到初始状态
+            return Initial;
+        }
     }
 
     public static class StateMachineMapper extends RichFlatMapFunction<LoginEvent, String> {
@@ -69,39 +102,6 @@ public class NFAExample {
                 // 如果还没结束，更新状态（状态跳转），继续读取事件
                 currentState.update(nextState);
             }
-        }
-    }
-
-    // 状态机实现
-    public enum State {
-        // 匹配失败，当前匹配终止
-        Terminal,
-        // 匹配成功
-        Matched,
-        // S2 状态
-        S2(new Transition("fail", Matched), new Transition("success", Terminal)),
-        // S1 状态
-        S1(new Transition("fail", S2), new Transition("success", Terminal)),
-        // 初始状态
-        Initial(new Transition("fail", S1), new Transition("success", Terminal));
-
-        // 状态转移规则
-        private final Transition[] transitions;
-
-        // 状态的构造方法，可以传入一组状态转移规则来定义状态
-        State(Transition... transitions) {
-            this.transitions = transitions;
-        }
-
-        // 状态的转移方法，根据当前输入事件类型，从定义好的转移规则中找到下一个状态
-        public State transition(String eventType) {
-            for (Transition t : transitions) {
-                if (t.getEventType().equals(eventType)) {
-                    return t.getTargetState();
-                }
-            }
-            // 如果没有找到转移规则，说明已经结束，回到初始状态
-            return Initial;
         }
     }
 

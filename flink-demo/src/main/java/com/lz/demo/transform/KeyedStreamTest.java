@@ -36,7 +36,7 @@ public class KeyedStreamTest {
         env.execute();
     }
 
-    // 自定义map function
+    // 自定义keyselect function
     public static class MyMapper implements KeySelector<Event, String> {
         @Override
         public String getKey(Event event) {
