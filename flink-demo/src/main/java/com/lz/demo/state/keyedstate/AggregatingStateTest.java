@@ -61,7 +61,8 @@ public class AggregatingStateTest {
                     new AggregatingStateDescriptor<>(
                             "avg",
                             new MyAggregate(),
-                            Types.TUPLE(Types.LONG, Types.LONG)));
+                            Types.TUPLE(Types.LONG, Types.LONG))
+            );
         }
 
         @Override

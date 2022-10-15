@@ -45,7 +45,7 @@ public class KeyedProcessFunctionTest {
                 .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(2)))
                 .aggregate(new UrlCountAggregate(), new UrlCountResult());
 
-        // 2.
+        // 2.获取每个窗口内的top2访问
         urlCountStream
                 .keyBy(v -> v.windowEnd)
                 .process(new TopNProcessResult(2))

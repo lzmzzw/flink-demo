@@ -1,4 +1,4 @@
-package com.lz.demo.window;
+package com.lz.demo.window.watermark;
 
 import com.lz.demo.entity.Event;
 import org.apache.flink.api.common.eventtime.*;

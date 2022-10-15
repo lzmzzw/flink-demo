@@ -20,23 +20,23 @@ public class SourceTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        // 1.从文件读取
+        // 1 从文件读取
         DataStreamSource<String> steam1 = env.readTextFile("input/clicks.txt");
 
-        // 2.从集合中读取
+        // 2 从集合中读取
         List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
         DataStreamSource<Integer> steam2 = env.fromCollection(numbers);
 
-        // 3.从元素读取
+        // 3 从元素读取
         DataStreamSource<Event> steam3 = env.fromElements(
                 new Event("Tom", "/home", 1000L),
                 new Event("Jerry", "/cart", 2000L)
         );
 
-        // 4.从socket流读取
+        // 4 从socket流读取
         DataStreamSource<String> steam4 = env.socketTextStream("192.168.56.3", 9999);
 
-        // 5.从kafka读取
+        // 5 从kafka读取
         env.setRestartStrategy(RestartStrategies.failureRateRestart(
                 3, // max failures per unit
                 Time.of(5, TimeUnit.MINUTES), // time interval for measuring failure rate
@@ -50,10 +50,10 @@ public class SourceTest {
         properties.setProperty("auto.offset.reset", "latest");
         DataStreamSource<String> steam5 = env.addSource(new FlinkKafkaConsumer<>("clicks", new SimpleStringSchema(), properties));
 
-        // 6.自定义source
+        // 6 自定义source
         DataStreamSource<Event> steam6 = env.addSource(new ClickSource());
 
-        // 6.自定义并行source
+        // 7 自定义并行source
         DataStreamSource<Event> steam7 = env.addSource(new ParallelClickSource()).setParallelism(4);
 
         steam1.print("1");
